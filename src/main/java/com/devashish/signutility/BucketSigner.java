@@ -23,7 +23,7 @@ public class BucketSigner {
      * @param keyName
      * @return
      */
-    public static String signBucket(String bucketName, String keyName) {
+    public static String signBucket(String bucketName, String keyName, String data) {
     	if(presigner==null) {
     		presigner = S3Presigner.create();
     	}
@@ -56,7 +56,7 @@ public class BucketSigner {
             connection.setRequestProperty("Content-Type","text/plain");
             connection.setRequestMethod("PUT");
             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-            out.write("This text was uploaded as an object by using a presigned URL.");
+            out.write(data);
             out.close();
 
             connection.getResponseCode();

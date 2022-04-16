@@ -1,6 +1,7 @@
 package com.devashish;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -26,8 +27,7 @@ public class BucketSignerServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String presignedUrl = BucketSigner.signBucket(request.getHeader("bucketName"), request.getHeader("keyName"));
-		response.getWriter().append("SignedUrl: ").append(presignedUrl);
+		response.getWriter().append("Not supported: ").append("GET method not supported.");
 	}
 
 	/**
@@ -37,7 +37,9 @@ public class BucketSignerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String data = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+		String presignedUrl = BucketSigner.signBucket(request.getHeader("bucketName"), request.getHeader("keyName"),data);
+		response.getWriter().append("SignedUrl: ").append(presignedUrl);
 	}
 
 }
