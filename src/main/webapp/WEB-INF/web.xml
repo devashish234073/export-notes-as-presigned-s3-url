@@ -12,6 +12,6 @@
   </servlet>
   <servlet-mapping>
   	<servlet-name>BucketSignerServlet</servlet-name>
-  	<url-pattern>/BucketSignerServlet</url-pattern>
+  	<url-pattern>/signBucket</url-pattern>
   </servlet-mapping>
 </web-app>

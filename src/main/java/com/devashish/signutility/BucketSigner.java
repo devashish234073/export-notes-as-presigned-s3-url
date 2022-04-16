@@ -1,6 +1,7 @@
 package com.devashish.signutility;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,8 +14,19 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 public class BucketSigner {
-    public static void signBucket(S3Presigner presigner, String bucketName, String keyName) {
-
+	
+	private static S3Presigner presigner = null;
+	
+    /**
+     * This methods signs a particular bucket
+     * @param bucketName
+     * @param keyName
+     * @return
+     */
+    public static String signBucket(String bucketName, String keyName) {
+    	if(presigner==null) {
+    		presigner = S3Presigner.create();
+    	}
         try {
             PutObjectRequest objectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
@@ -48,12 +60,33 @@ public class BucketSigner {
             out.close();
 
             connection.getResponseCode();
-            System.out.println("HTTP response code is " + connection.getResponseCode());
-
+            int respCode = connection.getResponseCode();
+            System.out.println("HTTP response code is " + respCode);
+            String resp = "";
+            if(respCode==200) {
+            	resp = readStream(connection.getInputStream());
+            } else {
+            	resp = readStream(connection.getErrorStream());
+            }
+            System.out.println("Response: "+resp);
+            return myURL;
         } catch (S3Exception e) {
             e.getStackTrace();
         } catch (IOException e) {
             e.getStackTrace();
         }
+        return null;
+    }
+    
+    private static String readStream(InputStream is) throws IOException {
+    	String data = "";
+    	do {
+    		data+=(char)is.read();
+    	} while(is.available()>0);
+    	return data;
+    }
+    
+    public static void getRidOfPresigner() {
+    	presigner.close();
     }
 }
