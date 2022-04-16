@@ -4,4 +4,14 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>BucketSignerServlet</servlet-name>
+  	<display-name>BucketSignerServlet</display-name>
+  	<description></description>
+  	<servlet-class>com.devashish.BucketSignerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>BucketSignerServlet</servlet-name>
+  	<url-pattern>/BucketSignerServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
